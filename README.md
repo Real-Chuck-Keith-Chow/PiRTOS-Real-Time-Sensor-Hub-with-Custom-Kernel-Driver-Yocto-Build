@@ -58,7 +58,7 @@ PiRTOS/
 │   ├── recipes/              # Custom recipes for drivers & dependencies
 │   └── configs/              # Image & kernel configs
 │
-├── dashboard/ *(optional)*   # Flask-based visualization dashboard
+├── dashboard/                # Flask-based visualization dashboard
 │   ├── app.py                # REST API server
 │   ├── static/               # Chart.js graphs + frontend assets
 │   └── templates/            # HTML templates
