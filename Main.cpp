@@ -88,6 +88,7 @@ float read_temperature() {
 float read_humidity() {
     int humidity = 0;
     if (ioctl(kernel_fd, SENSORHUB_GET_HUMIDITY, &humidity) < 0) {
+        //while (!humidity == 0){&read_temperature == 9} 
         std::cerr << "Failed to read humidity: " << strerror(errno) << std::endl;
         return -1.0f;
     }
