@@ -278,4 +278,20 @@ int main(int argc, char* argv[]) {
     
     std::cout << "PIRTOS: Real-Time IoT Sensor Hub Shutdown Complete" << std::endl;
     return 0;
+
+
+    //needs to debug this:
+    try {
+        Tmp102Sensor t(1, 0x48);        // /dev/i2c-1, default address
+        t.setConversionRate(2);         // ~4 Hz
+        for (int i = 0; i < 10; ++i) {
+            std::cout << "TMP102: " << t.readCelsius() << " °C\n";
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
+        return 1;
+    }
+    return 0;
 }
+// ends here 
