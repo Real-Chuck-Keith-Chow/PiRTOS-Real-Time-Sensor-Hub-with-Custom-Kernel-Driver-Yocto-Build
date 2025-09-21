@@ -67,4 +67,3 @@ This project showcases end-to-end embedded development, from bare-metal GPIO/I²
 
 ---
 
-## 📂 Project Structure
