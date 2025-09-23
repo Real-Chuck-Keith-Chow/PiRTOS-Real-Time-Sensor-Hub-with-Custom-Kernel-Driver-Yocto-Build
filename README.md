@@ -65,5 +65,8 @@ This project showcases end-to-end embedded development, from bare-metal GPIO/I²
 | LED Anode (+)      | Pin 15 | GPIO22 | Through 330Ω resistor        |
 | LED Cathode (–)    | Pin 20 | GND    |                              |
 
+<img width="944" height="1259" alt="image" src="https://github.com/user-attachments/assets/2445b5d1-d35f-4c5e-a07a-9a46fbaa6706" />
+
+
 ---
 
