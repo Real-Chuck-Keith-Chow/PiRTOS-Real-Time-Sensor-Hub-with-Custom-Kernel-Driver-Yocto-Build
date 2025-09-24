@@ -1,0 +1,14 @@
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build & Flash (Pico2)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile","-ExecutionPolicy","Bypass","-Command",
+        "cmake -S . -B build-pico2 -G Ninja -DPICO_BOARD=pico2; cmake --build build-pico2 -j; Write-Host '➡ Put the board in BOOTSEL, then press Enter...'; Read-Host; $v=Get-Volume | ? FileSystemLabel -match 'RPI'; if(-not $v){throw 'No RPI drive'}; Copy-Item build-pico2\\sensor_mvp.uf2 ($v.DriveLetter+':\\') -Force"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
