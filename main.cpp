@@ -1,4 +1,5 @@
 // main.cpp  — C++ showcase for Raspberry Pi Pico / Pico 2
+// Initializes hardware, starts scheduler/RTOS tasks, configures interrupts. Only high-level logic goes here no low-level register twiddling. 
 #include <cstdio>
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
