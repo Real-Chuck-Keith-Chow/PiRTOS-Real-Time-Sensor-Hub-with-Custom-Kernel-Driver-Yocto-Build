@@ -57,3 +57,18 @@ int main()
         setLed(odd);
     }
 }
+
+
+// ARMV7-M implementation of cover
+namespace armv7-m {
+class cover
+{
+public:
+    void protect() { __disable_irq(); sync(); }
+    void unprotect() { unsync(); __enable_irq(); }
+
+    void sync() { std::atomic_thread_fence(std::memory_order::acquire); }
+    void unsync() { std::atomic_thread_fence(std::memory_order::release); }
+};
+}
+
