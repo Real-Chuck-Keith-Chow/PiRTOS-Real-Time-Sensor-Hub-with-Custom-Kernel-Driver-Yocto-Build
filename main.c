@@ -75,28 +75,7 @@ public:
 
     bool pressed() const {
         bool level = gpio_get(pin_);
-        return active_low_ ? !level : level;
-    }
-
-private:
-    void handle_irq(uint32_t /*events*/) {
-        uint64_t now = time_us_64();
-        if (now - last_edge_us_ < debounce_us_) return; // debounce
-        last_edge_us_ = now;
-        if (cb_) cb_(pressed(), user_);
-    }
-
-    static void trampoline(uint gpio, uint32_t events) {
-        if (gpio < registry_size && registry_[gpio]) registry_[gpio]->handle_irq(events);
-    }
-
-    uint pin_; bool active_low_; uint32_t debounce_us_;
-    volatile uint64_t last_edge_us_{0};
-    cb_t cb_; void* user_;
-
-    static constexpr uint registry_size = 32;
-    static inline DebouncedButton* registry_[registry_size] = {};
-};
+        return active_low_ ? !level : level}
 
 // ---------- App state ----------
 static volatile bool g_armed = false;
