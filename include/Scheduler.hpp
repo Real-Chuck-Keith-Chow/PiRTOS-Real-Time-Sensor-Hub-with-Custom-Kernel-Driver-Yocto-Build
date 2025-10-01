@@ -1,14 +1,24 @@
 #pragma once
-#include <vector>
-#include <thread>
-#include <atomic>
 #include "Task.hpp"
+#include <atomic>
+#include <condition_variable>
+#include <mutex>
+#include <thread>
+#include <vector>
 
 class Scheduler {
-  std::vector<std::jthread> threads_;
-  std::atomic<bool> running_{false};
 public:
-  void start(const std::vector<TaskSpec>& tasks);
+  Scheduler();
+  ~Scheduler();
+  void add(Task* t);                 // non-owning
+  void start();
   void stop();
-  ~Scheduler() { stop(); }
+  bool running() const { return running_; }
+
+private:
+  std::atomic<bool> running_{false};
+  std::mutex m_;
+  std::condition_variable cv_;
+  std::vector<std::thread> workers_;
+  std::vector<Task*> tasks_;
 };
