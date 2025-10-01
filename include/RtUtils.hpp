@@ -1,23 +1,15 @@
 #pragma once
-#include <pthread.h>
-#include <sys/mman.h>
-#include <time.h>
-#include <stdexcept>
+#include <chrono>
+#include <iostream>
 
-namespace rt {
-inline void lock_memory() {
-  if (mlockall(MCL_CURRENT | MCL_FUTURE) != 0)
-    throw std::runtime_error("mlockall failed (need CAP_IPC_LOCK or sudo)");
+inline void pinThreadNice(int nice = -10) {
+  // portable "hint"; on Linux you could set sched params or nice()
+  (void)nice;
 }
-inline void set_realtime(pthread_t th, int prio) {
-  sched_param sp{}; sp.sched_priority = prio;
-  if (pthread_setschedparam(th, SCHED_FIFO, &sp) != 0)
-    throw std::runtime_error("setschedparam SCHED_FIFO failed (need CAP_SYS_NICE)");
+
+inline void log_ts(const char* tag, const char* msg) {
+  using namespace std::chrono;
+  auto now = time_point_cast<milliseconds>(steady_clock::now()).time_since_epoch().count();
+  std::cout << "[" << tag << " @" << now << "ms] " << msg << std::endl;
 }
-inline timespec now() { timespec t{}; clock_gettime(CLOCK_MONOTONIC, &t); return t; }
-inline void sleep_until(timespec& next, long period_ns) {
-  next.tv_nsec += period_ns;
-  while (next.tv_nsec >= 1'000'000'000) { next.tv_nsec -= 1'000'000'000; next.tv_sec++; }
-  clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, nullptr);
-}
-} // namespace rt
+
