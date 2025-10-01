@@ -1,10 +1,11 @@
 #pragma once
-#include <functional>
+#include <chrono>
 #include <string>
 
-struct TaskSpec {
-  std::string name;     // e.g., "sensor"
-  int hz;               // loop rate
-  int priority;         // SCHED_FIFO 1..99 (higher = more urgent)
-  std::function<void()> fn;
+struct Task {
+  virtual ~Task() = default;
+  virtual const char* name() const = 0;
+  virtual std::chrono::milliseconds period() const = 0;
+  virtual void run() = 0;
 };
+
