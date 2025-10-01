@@ -1,13 +1,17 @@
-#include <iostream>
-#include "Scheduler.hpp"
+#include "Task.hpp"
+#include "RtUtils.hpp"
+#include <atomic>
+#include <chrono>
 
-int main() {
-  Scheduler sch;
-  sch.start({
-    {"heartbeat", 5, 10, []{ std::cout << "." << std::flush; }},
-    {"tick",      1,  5,  []{ std::cout << " tick\\n"; }}
-  });
-  std::this_thread::sleep_for(std::chrono::seconds(5));
-  sch.stop();
-  return 0;
-}
+class HeartbeatTask : public Task {
+public:
+  const char* name() const override { return "heartbeat"; }
+  std::chrono::milliseconds period() const override { return std::chrono::milliseconds(500); }
+  void run() override {
+    state_ = !state_;
+    log_ts(name(), state_ ? "tick" : "tock");
+    // TODO: toggle a GPIO here if running on hardware (libgpiod recommended)
+  }
+private:
+  bool state_{false};
+};
