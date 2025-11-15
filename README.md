@@ -21,8 +21,8 @@ This project showcases end-to-end embedded development, from bare-metal GPIO/I²
 - 🟢 **Interrupt-Driven GPIO** — Handles motion detection and button presses with minimal latency  
 - 🟢 **Multi-Threaded C++ App** — Implements concurrency for sensor polling, logging, and networking  
 - 🟢 **Custom Linux Kernel Module** — Exposes sensor data via `/dev/sensorhub`  
-- 🟢 **Yocto/OpenEmbedded Build (optional)** — Builds a minimal, optimized Linux image  
-- 🟢 **REST API & Web Dashboard (optional)** — Displays live readings via Flask + Chart.js  
+- 🟢 **Yocto/OpenEmbedded Build (not done yet, still in the testing stage)** — Builds a minimal, optimized Linux image  
+- 🟢 **REST API & Web Dashboard (not done yet, still in the testing stage)** — Displays live readings via Flask + Chart.js  
 
 ---
 
