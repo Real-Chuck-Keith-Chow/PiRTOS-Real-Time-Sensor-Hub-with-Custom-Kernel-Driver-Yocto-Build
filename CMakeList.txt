@@ -1,20 +1,18 @@
 cmake_minimum_required(VERSION 3.13)
-include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-project(sensor_mvp C CXX ASM)
-pico_sdk_init()
+project(pirtos_hub C CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(sensor_mvp
-    main.c
+add_executable(pirtos_hub
+    userspace/src/main.cpp
+    userspace/src/sensor_manager.cpp
 )
 
-pico_enable_stdio_usb(sensor_mvp 1)
-pico_enable_stdio_uart(sensor_mvp 0)
-
-target_link_libraries(sensor_mvp
-    pico_stdlib
-    hardware_adc
-    hardware_i2c
+target_include_directories(pirtos_hub PRIVATE
+    userspace/include
 )
 
-pico_add_extra_outputs(sensor_mvp)
+# pthread needed for std::thread
+find_package(Threads REQUIRED)
+target_link_libraries(pirtos_hub PRIVATE Threads::Threads)
