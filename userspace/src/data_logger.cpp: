@@ -1,0 +1,15 @@
+#include "data_logger.h"
+#include <iostream>
+
+DataLogger::DataLogger(std::string path) : path_(std::move(path)) {}
+
+void DataLogger::log_data(const SensorData& data) {
+    // Stub: write to stdout; replace with SQLite/file logging as needed.
+    std::cout << "[LOG] (" << path_ << ") "
+              << "temp=" << data.temperature << "C "
+              << "hum=" << data.humidity << "% "
+              << "motion=" << data.motion_detected << " "
+              << "button=" << data.button_pressed << " "
+              << "ts=" << data.timestamp
+              << std::endl;
+}
