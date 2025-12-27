@@ -1,4 +1,6 @@
 #include "sensor_manager.h"
+#include "data_logger.h"
+#include "network_manager.h"
 #include "config.h"
 #include <atomic>
 #include <chrono>
@@ -8,20 +10,20 @@
 
 std::atomic<bool> running{true};
 
-void signal_handler(int) {
-    running = false;
-}
+void signal_handler(int) { running = false; }
 
 int main() {
     std::signal(SIGINT, signal_handler);
     std::signal(SIGTERM, signal_handler);
 
     SensorManager sensor_manager;
-
     if (!sensor_manager.initialize()) {
         std::cerr << "Failed to initialize SensorManager. Exiting." << std::endl;
         return 1;
     }
+
+    DataLogger data_logger("sensor_data.db");
+    NetworkManager network_manager;
 
     std::cout << "PiRTOS Sensor Hub Started. Press Ctrl+C to exit." << std::endl;
 
@@ -34,12 +36,8 @@ int main() {
 
         if (now >= next_log) {
             auto data = sensor_manager.read_sensors();
-            std::cout << "[DATA] temp=" << data.temperature
-                      << "C humidity=" << data.humidity
-                      << "% motion=" << data.motion_detected
-                      << " button=" << data.button_pressed
-                      << " ts=" << data.timestamp
-                      << std::endl;
+            data_logger.log_data(data);
+            network_manager.broadcast_data(data);
             next_log = now + std::chrono::milliseconds(DATA_LOG_INTERVAL_MS);
         }
 
@@ -55,3 +53,4 @@ int main() {
     std::cout << "PiRTOS Sensor Hub Stopped." << std::endl;
     return 0;
 }
+
