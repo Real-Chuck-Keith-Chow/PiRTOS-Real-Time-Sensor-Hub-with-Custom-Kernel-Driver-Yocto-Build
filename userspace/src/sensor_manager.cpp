@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 namespace {
-// Mirror of the kernel’s struct sensor_data in sensorhub_driver.c
+// Must mirror the kernel's struct sensor_data in sensorhub_driver.c
 struct KernelSensorData {
     float temperature;
     float humidity;
@@ -19,9 +19,8 @@ struct KernelSensorData {
     unsigned long timestamp;
 };
 
-// Ioctl command used in the kernel driver (0x01: reset data_ready)
-constexpr unsigned int SENSORHUB_IOCTL_RESET = 0x01;
-}
+constexpr unsigned int SENSORHUB_IOCTL_RESET = 0x01; // matches driver
+} // namespace
 
 SensorManager::SensorManager()
     : device_fd_(-1), initialized_(false), running_(false) {}
@@ -90,13 +89,11 @@ bool SensorManager::read_from_device(SensorData& data) {
         return false; // non-fatal, just try again
     }
 
-    // Any other short read or error is unexpected
     std::cerr << "SensorManager read error: " << std::strerror(errno) << std::endl;
     return false;
 }
 
 void SensorManager::update_thread() {
-    // Block until data arrives; driver wakes readers via wait queue
     while (running_) {
         SensorData new_data;
         if (read_from_device(new_data)) {
